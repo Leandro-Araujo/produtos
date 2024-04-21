@@ -1,0 +1,184 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "2017-06-06T09:27:52Z",
+        "title": "loja-produtos"
+    },
+    "basePath": "/",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/produtos/{idproduto}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "idproduto",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "200 response",
+                        "schema": {
+                            "$ref": "#/definitions/CompareDataArray"
+                        },
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simple-custom-auth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            },
+                            "responseTemplates": {
+                                "application/json": ""
+                            }
+                        }
+                    },
+                    "requestTemplates": {
+                        "application/json": "{\n    \"idproduto\": \"$input.params('idproduto')\"\n}"
+                    },
+                    "uri": "arn:aws:apigateway:sa-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:sa-east-1:723574251269:function:myFunction/invocations",
+                    "credentials": "arn:aws:iam::723574251269:role/apigateway-invok-lambda",
+                    "passthroughBehavior": "when_no_templates",
+                    "httpMethod": "POST",
+                    "contentHandling": "CONVERT_TO_TEXT",
+                    "type": "aws"
+                }
+            },
+            "options": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "200 response",
+                        "schema": {
+                            "$ref": "#/definitions/Empty"
+                        },
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "type": "string"
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "type": "string"
+                            },
+                            "Access-Control-Allow-Headers": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+                                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    },
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "when_no_match",
+                    "type": "mock"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "simple-custom-auth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "x-amazon-apigateway-authtype": "custom",
+            "x-amazon-apigateway-authorizer": {
+                "authorizerUri": "arn:aws:apigateway:sa-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:sa-east-1:723574251269:function:auth-function/invocations",
+                "authorizerCredentials": "arn:aws:iam::723574251269:role/apigateway-invok-lambda",
+                "authorizerResultTtlInSeconds": 30,
+                "type": "token"
+            }
+        }
+    },
+    "definitions": {
+        "CompareData": {
+            "type": "object",
+            "required": [
+                "age",
+                "height",
+                "income"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "income": {
+                    "type": "integer"
+                }
+            },
+            "title": "CompareData"
+        },
+        "Empty": {
+            "type": "object",
+            "title": "Empty Schema"
+        },
+        "CompareDataArray": {
+            "title": "CompareData",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "age": {
+                        "type": "integer"
+                    },
+                    "height": {
+                        "type": "integer"
+                    },
+                    "income": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "age",
+                    "height",
+                    "income"
+                ]
+            }
+        }
+    },
+    "x-amazon-apigateway-request-validators": {
+        "Validate body": {
+            "validateRequestParameters": false,
+            "validateRequestBody": true
+        }
+    }
+}
