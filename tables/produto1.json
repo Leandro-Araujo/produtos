@@ -1,0 +1,17 @@
+{
+  "idProduto": {
+    "S": "1"
+  },
+  "marca": {
+    "S": "Nike"
+  },
+  "modelo": {
+    "S": "Dry Fit"
+  },
+  "preco": {
+    "S": "150.00"
+  },
+  "tipo": {
+    "S": "Camisa"
+  }
+}
