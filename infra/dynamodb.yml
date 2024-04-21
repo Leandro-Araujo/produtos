@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources: 
+  myDynamoDBTableProduto: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "idProduto"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "idProduto"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "produto"
+  myDynamoDBTableUsuario: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "userName"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "userName"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "usuario"
+  myDynamoDBTableToken: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "idToken"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "idToken"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "token"
