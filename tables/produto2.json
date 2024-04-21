@@ -1,0 +1,17 @@
+{
+  "idProduto": {
+    "S": "2"
+  },
+  "marca": {
+    "S": "Adidas"
+  },
+  "modelo": {
+    "S": "Short Adidas"
+  },
+  "preco": {
+    "S": "120.00"
+  },
+  "tipo": {
+    "S": "Short"
+  }
+}
