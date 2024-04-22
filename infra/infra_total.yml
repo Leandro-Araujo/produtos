@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources: 
+  myDynamoDBTableProduto: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "idProduto"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "idProduto"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "produto"
+  myDynamoDBTableUsuario: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "userName"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "userName"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "usuario"
+  myDynamoDBTableToken: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: "idToken"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "idToken"
+          KeyType: "HASH"
+      BillingMode : PAY_PER_REQUEST
+      TableName: "token"
+  
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                Resource: 
+                  - !GetAtt myDynamoDBTableProduto.Arn
+                  - !GetAtt myDynamoDBTableUsuario.Arn
+                  - !GetAtt myDynamoDBTableToken.Arn
+  
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: MyLambdaFunction
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import botocore
+          from boto3.dynamodb.conditions import Key
+
+          dynamodb = boto3.client('dynamodb')
+
+          def lambda_handler(event, context):
+              idprod = event['idproduto']
+              response = dynamodb.get_item(
+                  TableName='produto',
+                  Key={
+                      'idProduto' : {'S': idprod}
+                  }
+              )
+    
+              print(response['Item'])
+   
+              # TODO implement
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps(response['Item'])
+              }
